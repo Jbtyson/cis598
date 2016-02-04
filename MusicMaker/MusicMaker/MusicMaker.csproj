@@ -44,6 +44,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Toub.Sound.Midi">
+      <HintPath>lib\Toub.Sound.Midi.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Form1.cs">
@@ -52,6 +55,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="MusicController.cs" />
+    <Compile Include="MusicMakerConfig.cs" />
+    <Compile Include="Music\Metronome.cs" />
+    <Compile Include="Music\Note.cs" />
+    <Compile Include="Music\NoteLength.cs" />
+    <Compile Include="Music\Pitch.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

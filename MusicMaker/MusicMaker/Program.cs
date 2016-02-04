@@ -16,6 +16,11 @@ namespace MusicMaker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            var musicController = new MusicController();
+            musicController.Init();
+            musicController.Play();
+
             Application.Run(new Form1());
         }
     }
