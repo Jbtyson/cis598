@@ -1,8 +1,8 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
-using MusicGenerator;
 
-namespace MusicMaker
+namespace MidiWatcher
 {
     static class Program
     {
@@ -14,11 +14,6 @@ namespace MusicMaker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            var musicController = new MusicController();
-            musicController.Init();
-            musicController.Play();
-
             Application.Run(new Form1());
         }
     }
