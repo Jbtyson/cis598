@@ -52,6 +52,12 @@
     <Compile Include="Music\Pitch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MidiWriter\MidiWriter.csproj">
+      <Project>{69831ffb-9427-4f7b-90d9-cfebd7c913a7}</Project>
+      <Name>MidiWriter</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

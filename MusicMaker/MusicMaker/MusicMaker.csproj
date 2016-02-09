@@ -77,6 +77,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MidiWriter\MidiWriter.csproj">
+      <Project>{69831ffb-9427-4f7b-90d9-cfebd7c913a7}</Project>
+      <Name>MidiWriter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MusicGenerator\MusicGenerator.csproj">
       <Project>{1b11ac45-97bc-4517-b716-51f6a608fc0e}</Project>
       <Name>MusicGenerator</Name>

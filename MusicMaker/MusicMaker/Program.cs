@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using MusicGenerator;
+using MidiWriter;
 
 namespace MusicMaker
 {
@@ -14,6 +15,9 @@ namespace MusicMaker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+           var test = new MidiWriter.MidiWriter();
+           test.TestWrite();
 
             var musicController = new MusicController();
             musicController.Init();
