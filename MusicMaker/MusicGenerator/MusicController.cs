@@ -7,7 +7,6 @@ namespace MusicGenerator
     public class MusicController
     {
         private readonly Metronome metronome;
-        private Note testNote;
         private Queue<Note> notesToPlay;
         private Queue<Note> notesToStop;
         private int sixteenthTickCount;
@@ -30,11 +29,11 @@ namespace MusicGenerator
 
         public void Generate()
         {
-            notesToPlay.Enqueue(new Note(Pitch.C4, 16, NoteLength.Quarter));
-            notesToPlay.Enqueue(new Note(Pitch.D4, 20, NoteLength.Quarter));
-            notesToPlay.Enqueue(new Note(Pitch.E4, 24, NoteLength.Eigth));
-            notesToPlay.Enqueue(new Note(Pitch.F4, 26, NoteLength.Eigth));
-            notesToPlay.Enqueue(new Note(Pitch.G4, 32, NoteLength.Half));
+            notesToPlay.Enqueue(new Note("C4", 16, NoteLength.Quarter));
+            notesToPlay.Enqueue(new Note("D4", 20, NoteLength.Quarter));
+            notesToPlay.Enqueue(new Note("E4", 24, NoteLength.Eigth));
+            notesToPlay.Enqueue(new Note("F4", 26, NoteLength.Eigth));
+            notesToPlay.Enqueue(new Note("G4", 32, NoteLength.Half));
         }
 
         public void Play()
