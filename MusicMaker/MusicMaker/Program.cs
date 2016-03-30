@@ -21,6 +21,7 @@ namespace MusicMaker
 
          var musicController = new MusicController();
          musicController.Init();
+         musicController.Generate();
          musicController.Play();
 
          var mv = new MusicViewer();

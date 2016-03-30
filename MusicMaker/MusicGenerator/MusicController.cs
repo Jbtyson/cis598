@@ -24,7 +24,6 @@ namespace MusicGenerator
             metronome.OnSixteenthTick = OnSixteenthTick;
             metronome.SetSpeed(60);
             sixteenthTickCount = 0;
-            Generate();
         }
 
         public void Generate()
