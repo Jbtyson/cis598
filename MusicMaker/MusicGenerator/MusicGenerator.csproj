@@ -48,11 +48,12 @@
     <Compile Include="MusicController.cs" />
     <Compile Include="MusicMakerConfig.cs" />
     <Compile Include="MusicStructure\Chord.cs" />
-    <Compile Include="MusicStructure\ChordGenerator.cs" />
     <Compile Include="Music\Metronome.cs" />
     <Compile Include="Music\Note.cs" />
     <Compile Include="Music\NoteLength.cs" />
     <Compile Include="Music\Pitch.cs" />
+    <Compile Include="Probability\Loader.cs" />
+    <Compile Include="Probability\MotifMatrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

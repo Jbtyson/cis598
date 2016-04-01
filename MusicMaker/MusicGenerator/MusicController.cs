@@ -1,61 +1,65 @@
 ﻿using Toub.Sound.Midi;
 using MusicGenerator.Music;
 using System.Collections.Generic;
+using MusicGenerator.Probability;
 
 namespace MusicGenerator
 {
-    public class MusicController
-    {
-        private readonly Metronome metronome;
-        private Queue<Note> notesToPlay;
-        private Queue<Note> notesToStop;
-        private int sixteenthTickCount;
+   public class MusicController
+   {
+      private readonly Metronome metronome;
+      private Queue<Note> notesToPlay;
+      private Queue<Note> notesToStop;
+      private int sixteenthTickCount;
 
 
-        public MusicController()
-        {
-            metronome = new Metronome();
-            notesToPlay = new Queue<Note>();
-            notesToStop = new Queue<Note>();
-        }
+      public MusicController()
+      {
+         metronome = new Metronome();
+         notesToPlay = new Queue<Note>();
+         notesToStop = new Queue<Note>();
+      }
 
-        public void Init()
-        {
-            metronome.OnSixteenthTick = OnSixteenthTick;
-            metronome.SetSpeed(60);
-            sixteenthTickCount = 0;
-        }
+      public void Init()
+      {
+         metronome.OnSixteenthTick = OnSixteenthTick;
+         metronome.SetSpeed(60);
+         sixteenthTickCount = 0;
+      }
 
-        public void Generate()
-        {
-            notesToPlay.Enqueue(new Note("C4", 16, NoteLength.Quarter));
-            notesToPlay.Enqueue(new Note("D4", 20, NoteLength.Quarter));
-            notesToPlay.Enqueue(new Note("E4", 24, NoteLength.Eigth));
-            notesToPlay.Enqueue(new Note("F4", 26, NoteLength.Eigth));
-            notesToPlay.Enqueue(new Note("G4", 32, NoteLength.Half));
-        }
+      public void Generate()
+      {
+         notesToPlay.Enqueue(new Note("C4", 16, NoteLength.Quarter));
+         notesToPlay.Enqueue(new Note("D4", 20, NoteLength.Quarter));
+         notesToPlay.Enqueue(new Note("E4", 24, NoteLength.Eigth));
+         notesToPlay.Enqueue(new Note("F4", 26, NoteLength.Eigth));
+         notesToPlay.Enqueue(new Note("G4", 32, NoteLength.Half));
 
-        public void Play()
-        {
-            MidiPlayer.OpenMidi();
-            metronome.Start();
-        }
+         var motifMatrix = Loader.LoadMotifMatrix();
+         var note = motifMatrix.GetNextNoteId(0);
+      }
 
-        public void OnSixteenthTick()
-        {
-            sixteenthTickCount++;
+      public void Play()
+      {
+         MidiPlayer.OpenMidi();
+         metronome.Start();
+      }
 
-            if (notesToPlay.Count > 0 && notesToPlay.Peek().StartInterval <= sixteenthTickCount)
-            {
-                var note = notesToPlay.Dequeue();
-                note.Play();
-                notesToStop.Enqueue(note);
-            }
+      public void OnSixteenthTick()
+      {
+         sixteenthTickCount++;
 
-            if (notesToStop.Count > 0 && notesToStop.Peek().EndInterval <= sixteenthTickCount)
-            {
-                notesToStop.Dequeue().Stop();
-            }
-        }
-    }
+         if (notesToPlay.Count > 0 && notesToPlay.Peek().StartInterval <= sixteenthTickCount)
+         {
+            var note = notesToPlay.Dequeue();
+            note.Play();
+            notesToStop.Enqueue(note);
+         }
+
+         if (notesToStop.Count > 0 && notesToStop.Peek().EndInterval <= sixteenthTickCount)
+         {
+            notesToStop.Dequeue().Stop();
+         }
+      }
+   }
 }

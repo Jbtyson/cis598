@@ -33,7 +33,7 @@ namespace MusicGenerator.Music
 
       public int GetNoteId()
       {
-         
+         return -1;
       }
    }
 }

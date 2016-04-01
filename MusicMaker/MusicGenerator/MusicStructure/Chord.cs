@@ -59,7 +59,6 @@ namespace MusicGenerator.MusicStructure
 
       public void AddInterval(Interval interval)
       {
-         Root.
       }
    }
 }

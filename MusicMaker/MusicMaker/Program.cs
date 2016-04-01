@@ -26,6 +26,8 @@ namespace MusicMaker
 
          var mv = new MusicViewer();
          Application.Run(mv);
+         //var properties = new PropertiesView();
+         //Application.Run(properties);
       }
    }
 }
