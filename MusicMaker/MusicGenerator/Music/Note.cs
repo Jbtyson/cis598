@@ -11,6 +11,8 @@ namespace MusicGenerator.Music
       private readonly NoteLength noteLength;
       private readonly byte velocity;
 
+      private static string[] pitches = {"A","A#","B","C","C#","D","D#","E","F","F#","G","G#"};
+
       public Note(string pitch, int startInterval, NoteLength noteLength, byte velocity = 100)
       {
          this.pitch = pitch;
@@ -31,9 +33,11 @@ namespace MusicGenerator.Music
          MidiPlayer.Play(new NoteOff(0, MusicMakerConfig.DefaultChannel, pitch, velocity));
       }
 
-      public int GetNoteId()
+      public static string GetNoteName(int id)
       {
-         return -1;
+         var pitch = pitches[id%12];
+         //return pitch + id/12;
+         return pitch + 4;
       }
    }
 }

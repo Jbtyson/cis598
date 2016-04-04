@@ -1,6 +1,8 @@
 ﻿using Toub.Sound.Midi;
 using MusicGenerator.Music;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using MusicGenerator.Probability;
 
 namespace MusicGenerator
@@ -29,14 +31,33 @@ namespace MusicGenerator
 
       public void Generate()
       {
-         notesToPlay.Enqueue(new Note("C4", 16, NoteLength.Quarter));
-         notesToPlay.Enqueue(new Note("D4", 20, NoteLength.Quarter));
-         notesToPlay.Enqueue(new Note("E4", 24, NoteLength.Eigth));
-         notesToPlay.Enqueue(new Note("F4", 26, NoteLength.Eigth));
-         notesToPlay.Enqueue(new Note("G4", 32, NoteLength.Half));
+         //notesToPlay.Enqueue(new Note("C4", 16, NoteLength.Quarter));
+         //notesToPlay.Enqueue(new Note("D4", 20, NoteLength.Quarter));
+         //notesToPlay.Enqueue(new Note("E4", 24, NoteLength.Eigth));
+         //notesToPlay.Enqueue(new Note("F4", 26, NoteLength.Eigth));
+         //notesToPlay.Enqueue(new Note("G4", 32, NoteLength.Half));
 
+         var notes = GenerateMotif(100).ToList();
+         notes.ForEach(notesToPlay.Enqueue);
+      }
+
+      public IEnumerable<Note> GenerateMotif(int numNotes)
+      {
          var motifMatrix = Loader.LoadMotifMatrix();
-         var note = motifMatrix.GetNextNoteId(0);
+         var notes = new List<Note>();
+         var lastNote = 0;
+         var lastLength = NoteLength.Quarter;
+         var startTick = 0;
+
+         for (var i = 0; i < numNotes; i++)
+         {
+            lastNote = motifMatrix.GetNextNoteId(lastNote);
+            lastLength = motifMatrix.GetNextNoteLength(lastLength);
+            notes.Add(new Note(Note.GetNoteName(lastNote), startTick, lastLength));
+            startTick += (int)lastLength;
+         }
+
+         return notes;
       }
 
       public void Play()
