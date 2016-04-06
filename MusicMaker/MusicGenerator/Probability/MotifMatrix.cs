@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using MusicGenerator.Music;
 
 namespace MusicGenerator.Probability
@@ -6,9 +8,11 @@ namespace MusicGenerator.Probability
    public class MotifMatrix
    {
       private const int SIZE = 12;
-      private double[,] values;
-      private NoteLength[] noteLengths = { NoteLength.Sixteenth, NoteLength.Eigth, NoteLength.Quarter, NoteLength.Half };
+      private double[,] values, scaleValues;
+      private NoteLength[] noteLengths = {NoteLength.Sixteenth, NoteLength.Eigth, NoteLength.Quarter, NoteLength.Half};
       private Random random;
+      private int root;
+      private int[] scale;
 
       public MotifMatrix(string[] values)
       {
@@ -25,13 +29,14 @@ namespace MusicGenerator.Probability
 
       public int GetNextNoteId(int currentId)
       {
-         var rand = random.NextDouble() * 100;
+         var sum = scale.Sum();
+         var rand = random.NextDouble()*sum;
          for (var i = 0; i < SIZE; i++)
          {
             rand -= values[currentId, i];
             if (rand <= 0)
             {
-               return i;
+               return scale[i];
             }
          }
 
@@ -51,6 +56,37 @@ namespace MusicGenerator.Probability
          if (rand < 95)
             return NoteLength.Quarter;
          return NoteLength.Sixteenth;
+      }
+
+      public IEnumerable<Note> GenerateMotif(int numNotes)
+      {
+         var notes = new List<Note>();
+         var lastNote = 0;
+         var lastLength = NoteLength.Quarter;
+         var startTick = 0;
+
+         for (var i = 0; i < numNotes; i++)
+         {
+            lastNote = GetNextNoteId(lastNote);
+            lastLength = GetNextNoteLength(lastLength);
+            notes.Add(new Note(Note.GetNoteName(lastNote), startTick, lastLength));
+            startTick += (int) lastLength;
+         }
+
+         return notes;
+      }
+
+      public void SetKey(int noteId, int[] scale)
+      {
+         var m = new Matrix(0,0);
+
+         root = noteId;
+         this.scale = new int[scale.Length];
+         for (var i = 0; i < scale.Length; i++)
+         {
+            this.scale[i] = root + scale[i];
+            //scaleValues[i] = values[i];
+         }
       }
    }
 }

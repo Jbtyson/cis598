@@ -3,6 +3,7 @@ using MusicGenerator.Music;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using MusicGenerator.MusicStructure;
 using MusicGenerator.Probability;
 
 namespace MusicGenerator
@@ -37,27 +38,10 @@ namespace MusicGenerator
          //notesToPlay.Enqueue(new Note("F4", 26, NoteLength.Eigth));
          //notesToPlay.Enqueue(new Note("G4", 32, NoteLength.Half));
 
-         var notes = GenerateMotif(100).ToList();
+         var motifGen = Loader.LoadMotifMatrix();
+         motifGen.SetKey(Note.GetNoteId("C4"), Scale.Major);
+         var notes = motifGen.GenerateMotif(100).ToList();
          notes.ForEach(notesToPlay.Enqueue);
-      }
-
-      public IEnumerable<Note> GenerateMotif(int numNotes)
-      {
-         var motifMatrix = Loader.LoadMotifMatrix();
-         var notes = new List<Note>();
-         var lastNote = 0;
-         var lastLength = NoteLength.Quarter;
-         var startTick = 0;
-
-         for (var i = 0; i < numNotes; i++)
-         {
-            lastNote = motifMatrix.GetNextNoteId(lastNote);
-            lastLength = motifMatrix.GetNextNoteLength(lastLength);
-            notes.Add(new Note(Note.GetNoteName(lastNote), startTick, lastLength));
-            startTick += (int)lastLength;
-         }
-
-         return notes;
       }
 
       public void Play()
