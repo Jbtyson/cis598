@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Input\MidiCsvReader.cs" />
     <Compile Include="MusicController.cs" />
     <Compile Include="MusicMakerConfig.cs" />
     <Compile Include="MusicStructure\Chord.cs" />
