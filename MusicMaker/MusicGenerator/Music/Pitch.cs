@@ -1,50 +1,34 @@
-﻿namespace MusicGenerator.Music
-{
-   public enum Pitch
-   {
-      C4 = 72,
-      D4 = 74,
-      E4 = 76,
-      F4 = 78,
-      G4 = 80,
-      A5 = 82,
-      B5 = 84,
-      C5 = 86,
-   }
+﻿using System.Collections.Generic;
+using System.Linq;
 
+namespace MusicGenerator.Music
+{
    public static class PitchCode
    {
-      public static string GetNoteName(int pitchCode)
+      private static Dictionary<string, int> pitchCodes = new Dictionary<string, int>
       {
-         var val = "";
-         switch (pitchCode)
-         {
-            case 72:
-               val = "C4";
-               break;
-            case 74:
-               val = "D4";
-               break;
-            case 76:
-               val = "E4";
-               break;
-            case 78:
-               val = "F4";
-               break;
-            case 80:
-               val = "G4";
-               break;
-            case 82:
-               val = "A5";
-               break;
-            case 84:
-               val = "B5";
-               break;
-            case 86:
-               val = "C5";
-               break;
-         }
-         return val;
+         {"C4", 72},
+         {"C#4", 73},
+         {"D4", 74},
+         {"D#4", 75},
+         {"E4", 76},
+         {"F4", 77},
+         {"F#4", 78},
+         {"F4", 79},
+         {"G#4", 80},
+         {"A4", 81},
+         {"A#4", 82},
+         {"B4", 83}
+      };
+
+      public static string GetNoteName(int noteId)
+      {
+         return pitchCodes.First(p => p.Value == noteId).Key;
+      }
+
+      public static int GetNoteId(string noteName)
+      {
+         return pitchCodes[noteName];
       }
    }
 }

@@ -55,6 +55,7 @@
     <Compile Include="Music\NoteLength.cs" />
     <Compile Include="Music\Pitch.cs" />
     <Compile Include="Probability\Loader.cs" />
+    <Compile Include="Probability\MarkovChain.cs" />
     <Compile Include="Probability\Matrix.cs" />
     <Compile Include="Probability\MotifMatrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

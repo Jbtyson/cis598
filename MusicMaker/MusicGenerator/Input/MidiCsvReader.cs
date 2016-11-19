@@ -7,15 +7,14 @@ namespace MusicGenerator.Input
 {
     public class MidiCsvReader
     {
-        private string path;
         private int currentTime;
 
-        public MidiCsvReader(string path)
+        public MidiCsvReader()
         {
-            this.path = path;
+
         }
 
-        private IEnumerable<Note> ConvertFileToNoteList()
+        public IEnumerable<Note> ConvertFileToNoteList(string path)
         {
             var notes = new List<Note>();
 

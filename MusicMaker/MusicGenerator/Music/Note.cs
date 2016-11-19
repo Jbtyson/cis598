@@ -7,8 +7,9 @@ namespace MusicGenerator.Music
    {
       public int StartInterval { get; set; }
       public int EndInterval { get; set; }
+      public int NoteId { get; set; }
+      public string Pitch { get; set; }
 
-      private readonly string pitch;
       private readonly NoteLength noteLength;
       private readonly byte velocity;
 
@@ -16,7 +17,7 @@ namespace MusicGenerator.Music
 
       public Note(string pitch, int startInterval, NoteLength noteLength, byte velocity = 100)
       {
-         this.pitch = pitch;
+         this.Pitch = pitch;
          this.noteLength = noteLength;
          this.velocity = velocity;
 
@@ -26,12 +27,12 @@ namespace MusicGenerator.Music
 
       public void Play()
       {
-         MidiPlayer.Play(new NoteOn(0, MusicMakerConfig.DefaultChannel, pitch, velocity));
+         MidiPlayer.Play(new NoteOn(0, MusicMakerConfig.DefaultChannel, Pitch, velocity));
       }
 
       public void Stop()
       {
-         MidiPlayer.Play(new NoteOff(0, MusicMakerConfig.DefaultChannel, pitch, velocity));
+         MidiPlayer.Play(new NoteOff(0, MusicMakerConfig.DefaultChannel, Pitch, velocity));
       }
 
       public static string GetNoteName(int id)

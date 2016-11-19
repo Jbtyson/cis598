@@ -3,6 +3,7 @@ using MusicGenerator.Music;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using MusicGenerator.Input;
 using MusicGenerator.MusicStructure;
 using MusicGenerator.Probability;
 
@@ -40,8 +41,11 @@ namespace MusicGenerator
 
          var motifGen = Loader.LoadMotifMatrix();
          motifGen.SetKey(Note.GetNoteId("C4"), Scale.Major);
-         var notes = motifGen.GenerateMotif(100).ToList();
-         notes.ForEach(notesToPlay.Enqueue);
+         //var notes = motifGen.GenerateMotif(100).ToList();
+         //notes.ForEach(notesToPlay.Enqueue);
+
+         var midiCsvReader = new MidiCsvReader();
+         var trainingDataNotes = midiCsvReader.ConvertFileToNoteList("..\\..\\..\\MusicGenerator\\data\\training.csv");
       }
 
       public void Play()
