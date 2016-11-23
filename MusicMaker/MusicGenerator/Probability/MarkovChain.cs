@@ -54,7 +54,7 @@ namespace MusicGenerator.Probability
 
       public void Create()
       {
-         for(var i = 0; i < order; i++)
+         for (var i = 0; i < order; i++)
          {
             orders[i] = CreateOrder(i + 1);
          }
@@ -67,7 +67,7 @@ namespace MusicGenerator.Probability
          var chain = new int[order];
          OrderPage page;
 
-         for(var i = 0; i < order - 1; i++)
+         for (var i = 0; i < order - 1; i++)
          {
             queue.Enqueue(values[i]);
          }
@@ -80,7 +80,7 @@ namespace MusicGenerator.Probability
 
             queue.CopyTo(chain, 0);
 
-            if(!pages.ContainsKey(chain[0]))
+            if (!pages.ContainsKey(chain[0]))
                pages[chain[0]] = new OrderPage();
             page = pages[chain[0]];
 
@@ -138,9 +138,9 @@ namespace MusicGenerator.Probability
       private int GetRandomValueFromOrderPage(OrderPage page)
       {
          var list = new List<int>();
-         foreach(var p in page.children)
+         foreach (var p in page.children)
          {
-            for(var i = 0; i < p.Value.occurences; i++)
+            for (var i = 0; i < p.Value.occurences; i++)
             {
                list.Add(p.Key);
             }

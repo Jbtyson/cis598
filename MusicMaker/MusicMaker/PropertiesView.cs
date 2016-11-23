@@ -26,7 +26,7 @@ namespace MusicMaker
          uxGridViewMotif.Columns.Add("11", "1");
          uxGridViewMotif.Columns.Add("12", "12");
 
-         var temp = new[] {"8.33", "8.33", "8.33", "8.33", "8.33", "8.33", "8.33", "8.33", "8.33", "8.33", "8.33", "8.33"};
+         var temp = new[] { "8.33", "8.33", "8.33", "8.33", "8.33", "8.33", "8.33", "8.33", "8.33", "8.33", "8.33", "8.33" };
          uxGridViewMotif.Rows.Add(temp);
          uxGridViewMotif.Rows.Add(temp);
          uxGridViewMotif.Rows.Add(temp);
