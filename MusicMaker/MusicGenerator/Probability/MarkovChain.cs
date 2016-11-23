@@ -115,6 +115,12 @@ namespace MusicGenerator.Probability
             page = pages[newList[0]];
             for (var i = 1; i < count; i++)
             {
+               if (!page.children.ContainsKey(newList[i]))
+               {
+                  newList.RemoveRange(0, 1);
+                  return GetNext(newList);
+               }
+
                page = page.children[newList[i]];
             }
          }

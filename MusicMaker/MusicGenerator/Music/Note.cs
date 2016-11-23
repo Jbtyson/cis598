@@ -12,14 +12,16 @@ namespace MusicGenerator.Music
 
       private readonly NoteLength noteLength;
       private readonly byte velocity;
+      private readonly byte channelOffset;
 
       private static string[] pitches = { "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#" };
 
-      public Note(string pitch, int startInterval, NoteLength noteLength, byte velocity = 100)
+      public Note(string pitch, int startInterval, NoteLength noteLength, byte velocity = 100, byte channelOffset = 0)
       {
          this.Pitch = pitch;
          this.noteLength = noteLength;
          this.velocity = velocity;
+         this.channelOffset = channelOffset;
 
          StartInterval = startInterval;
          EndInterval = startInterval + (int)noteLength;
@@ -28,7 +30,7 @@ namespace MusicGenerator.Music
 
       public void Play()
       {
-         MidiPlayer.Play(new NoteOn(0, MusicMakerConfig.DefaultChannel, Pitch, velocity));
+         MidiPlayer.Play(new NoteOn(0, (byte)(MusicMakerConfig.DefaultChannel + channelOffset), Pitch, velocity));
       }
 
       public void Stop()
