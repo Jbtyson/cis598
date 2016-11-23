@@ -52,7 +52,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="MarkovChainTests.cs" />
-    <Compile Include="MatrixTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

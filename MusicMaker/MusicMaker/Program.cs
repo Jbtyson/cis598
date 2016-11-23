@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
-using MusicGenerator;
 using System.Threading;
-using System.Linq;
-using System.Collections.Generic;
-using MusicGenerator.Music;
+using MusicGenerator;
+using MusicMaker.MusicPlayer;
+using MusicGenerator;
 
 namespace MusicMaker
 {
@@ -19,16 +18,12 @@ namespace MusicMaker
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
 
+         var musicCreator = new MusicCreator(5);
+         var melody = musicCreator.GenerateNotesFromFile("..\\..\\..\\MusicGenerator\\data\\odeToJoyMelody.csv");
+         var bass = musicCreator.GenerateNotesFromFile("..\\..\\..\\MusicGenerator\\data\\odeToJoyBass.csv");
+         var notes = musicCreator.MergeNoteLists(melody, bass);
+
          var musicController = new MusicController();
-         musicController.Init();
-         var melody = musicController.GenerateMelody();
-         var bass = musicController.GenerateBass();
-
-         var notes = new List<Note>();
-         melody.ToList().ForEach(m => notes.Add(m));
-         bass.ToList().ForEach(b => notes.Add(b));
-         notes.Sort((a, b) => a.StartInterval.CompareTo(b.StartInterval));
-
          new Thread(delegate () { musicController.Play(notes); }).Start();
 
          var mv = new MusicViewer(notes);

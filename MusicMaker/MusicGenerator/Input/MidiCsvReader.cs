@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using MusicGenerator.Music;
+using MusicGenerator.MusicStructure;
 
 namespace MusicGenerator.Input
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using MusicGenerator.Music;
 using System;
+using MusicGenerator.MusicStructure;
 
 namespace MusicGenerator.Probability
 {

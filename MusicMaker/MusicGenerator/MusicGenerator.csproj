@@ -39,37 +39,22 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="Toub.Sound.Midi, Version=2.0.4.0, Culture=neutral, PublicKeyToken=9510c3608a1f0024">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Toub.Sound.Midi.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Input\MidiCsvReader.cs" />
-    <Compile Include="MusicController.cs" />
-    <Compile Include="MusicMakerConfig.cs" />
+    <Compile Include="MusicCreator.cs" />
     <Compile Include="MusicStructure\Chord.cs" />
+    <Compile Include="MusicStructure\Note.cs" />
+    <Compile Include="MusicStructure\NoteLength.cs" />
+    <Compile Include="MusicStructure\Pitch.cs" />
     <Compile Include="MusicStructure\Scale.cs" />
-    <Compile Include="Music\Metronome.cs" />
-    <Compile Include="Music\Note.cs" />
-    <Compile Include="Music\NoteLength.cs" />
-    <Compile Include="Music\Pitch.cs" />
-    <Compile Include="Probability\Loader.cs" />
     <Compile Include="Probability\MarkovChain.cs" />
-    <Compile Include="Probability\Matrix.cs" />
-    <Compile Include="Probability\MotifMatrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MidiWriter\MidiWriter.csproj">
-      <Project>{69831ffb-9427-4f7b-90d9-cfebd7c913a7}</Project>
-      <Name>MidiWriter</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="data\maryHadALittleLamb.csv" />
-    <None Include="data\motifMatrix.csv" />
-    <None Include="data\odeToJoy.csv" />
+    <None Include="data\odeToJoyBass.csv" />
+    <None Include="data\odeToJoyMelody.csv" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
