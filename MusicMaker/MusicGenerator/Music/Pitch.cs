@@ -7,18 +7,30 @@ namespace MusicGenerator.Music
    {
       private static Dictionary<string, int> pitchCodes = new Dictionary<string, int>
       {
-         {"C4", 72},
+         {"C3",  60},
+         {"C#3", 61},
+         {"D3",  62},
+         {"D#3", 63},
+         {"E3",  64},
+         {"F3",  65},
+         {"F#3", 66},
+         {"G3",  67},
+         {"G#3", 68},
+         {"A3",  69},
+         {"A#3", 70},
+         {"B3",  71},
+         {"C4",  72},
          {"C#4", 73},
-         {"D4", 74},
+         {"D4",  74},
          {"D#4", 75},
-         {"E4", 76},
-         {"F4", 77},
+         {"E4",  76},
+         {"F4",  77},
          {"F#4", 78},
-         {"F4", 79},
+         {"G4",  79},
          {"G#4", 80},
-         {"A4", 81},
+         {"A4",  81},
          {"A#4", 82},
-         {"B4", 83}
+         {"B4",  83}
       };
 
       public static string GetNoteName(int noteId)

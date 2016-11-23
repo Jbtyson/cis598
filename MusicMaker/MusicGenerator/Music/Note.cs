@@ -23,6 +23,7 @@ namespace MusicGenerator.Music
 
          StartInterval = startInterval;
          EndInterval = startInterval + (int)noteLength;
+         NoteId = PitchCode.GetNoteId(pitch);
       }
 
       public void Play()

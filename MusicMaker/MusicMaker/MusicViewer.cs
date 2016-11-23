@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MusicGenerator.Music;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -12,9 +14,11 @@ namespace MusicMaker
       private Graphics graphics;
       private int sixteenthNoteWidth = 5;
       private int noteHeight = 6;
+      private readonly IEnumerable<Note> notes;
 
-      public MusicViewer()
+      public MusicViewer(IEnumerable<Note> notes)
       {
+         this.notes = notes;
          InitializeComponent();
       }
 
@@ -47,22 +51,22 @@ namespace MusicMaker
          return noteNames[noteIndex] + i / 11;
       }
 
-      private void DrawNotes()
+      public void DrawNotes()
       {
-         var rand = new Random();
-         for (int i = 0; i < 100; i++)
+         var randomGen = new Random();
+         var color = Color.FromArgb(randomGen.Next(255), randomGen.Next(255), randomGen.Next(255));
+
+         foreach (var note in notes)
          {
-            DrawNote(rand.Next(100), rand.Next(100) + 20, rand.Next(16) * 4);
+            DrawNote(note.NoteId, note.StartInterval, note.EndInterval - note.StartInterval, color);
          }
       }
 
-      public void DrawNote(int noteId, int noteBegin, int noteDuration)
+      public void DrawNote(int noteId, int noteBegin, int noteDuration, Color color)
       {
          int x1 = noteBegin * sixteenthNoteWidth;
          int y1 = noteId * noteHeight;
          int width = noteDuration * sixteenthNoteWidth;
-         var randonGen = new Random();
-         var color = Color.FromArgb(randonGen.Next(255), randonGen.Next(255), randonGen.Next(255));
          graphics.FillRectangle(new SolidBrush(color), x1, y1, width, noteHeight);
          graphics.DrawRectangle(new Pen(Color.Black), x1, y1, width, noteHeight);
       }

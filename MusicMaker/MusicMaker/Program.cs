@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using MusicGenerator;
-using MidiWriter;
+using System.Threading;
 
 namespace MusicMaker
 {
@@ -16,18 +16,13 @@ namespace MusicMaker
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
 
-         //var test = new MidiWriter.MidiWriter();
-         //test.TestWrite();
-
          var musicController = new MusicController();
          musicController.Init();
-         musicController.Generate();
-         musicController.Play();
+         var notes = musicController.Generate();
+         new Thread(delegate () { musicController.Play(); }).Start();
 
-         var mv = new MusicViewer();
+         var mv = new MusicViewer(notes);
          Application.Run(mv);
-         //var properties = new PropertiesView();
-         //Application.Run(properties);
       }
    }
 }
