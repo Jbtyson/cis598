@@ -3,7 +3,6 @@ using System.Windows.Forms;
 using System.Threading;
 using MusicGenerator;
 using MusicMaker.MusicPlayer;
-using MusicGenerator;
 
 namespace MusicMaker
 {

@@ -7,13 +7,10 @@ namespace MusicMaker.MusicPlayer
 {
    public class MusicController
    {
-      private const int markovChainOrder = 5;
-      private const int channelCount = 8;
       private readonly Metronome metronome;
-      private Queue<Note> notesToPlay;
-      private Queue<Note> notesToStop;
+      private readonly Queue<Note> notesToPlay;
+      private readonly Queue<Note> notesToStop;
       private int sixteenthTickCount;
-      private byte[] channels;
 
       public MusicController()
       {
@@ -23,7 +20,6 @@ namespace MusicMaker.MusicPlayer
          metronome.OnSixteenthTick = OnSixteenthTick;
          metronome.SetSpeed(30);
          sixteenthTickCount = 0;
-         channels = new byte[channelCount];
       }
 
       public void Play(IEnumerable<Note> notes)

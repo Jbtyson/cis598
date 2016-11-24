@@ -8,10 +8,6 @@ namespace MusicGenerator.Input
    {
       private int currentTime;
 
-      public MidiCsvReader()
-      {
-      }
-
       public IEnumerable<Note> ConvertFileToNoteList(string path)
       {
          var notes = new List<Note>();

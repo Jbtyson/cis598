@@ -9,18 +9,18 @@ namespace MusicGenerator.Probability
    {
       private class OrderPage
       {
-         public Dictionary<int, OrderPage> children;
-         public int occurences;
+         public Dictionary<int, OrderPage> Children;
+         public int Occurences;
 
          public OrderPage()
          {
-            children = new Dictionary<int, OrderPage>();
+            Children = new Dictionary<int, OrderPage>();
          }
       }
 
       private readonly int order;
       private readonly List<int> values;
-      private Dictionary<int, OrderPage>[] orders;
+      private readonly Dictionary<int, OrderPage>[] orders;
       private readonly Random random;
 
       public MarkovChain(int order)
@@ -60,47 +60,47 @@ namespace MusicGenerator.Probability
          }
       }
 
-      private Dictionary<int, OrderPage> CreateOrder(int order)
+      private Dictionary<int, OrderPage> CreateOrder(int currentOrder)
       {
          var pages = new Dictionary<int, OrderPage>();
          var queue = new Queue<int>();
-         var chain = new int[order];
-         OrderPage page;
+         var chain = new int[currentOrder];
 
-         for (var i = 0; i < order - 1; i++)
+         for (var i = 0; i < currentOrder - 1; i++)
          {
             queue.Enqueue(values[i]);
          }
 
-         for (var i = order - 1; i < values.Count; i++)
+         for (var i = currentOrder - 1; i < values.Count; i++)
          {
             queue.Enqueue(values[i]);
-            if (queue.Count > order)
+            if (queue.Count > currentOrder)
                queue.Dequeue();
 
             queue.CopyTo(chain, 0);
 
             if (!pages.ContainsKey(chain[0]))
                pages[chain[0]] = new OrderPage();
-            page = pages[chain[0]];
+            var page = pages[chain[0]];
 
             for (var j = 1; j < queue.Count; j++)
             {
-               if (!page.children.ContainsKey(chain[j]))
-                  page.children[chain[j]] = new OrderPage();
-               page = page.children[chain[j]];
+               if (!page.Children.ContainsKey(chain[j]))
+                  page.Children[chain[j]] = new OrderPage();
+               page = page.Children[chain[j]];
             }
-            page.occurences++;
+            page.Occurences++;
          }
 
          return pages;
       }
 
-      public int GetNext(IEnumerable<int> list)
+      public int GetNext(IEnumerable<int> enumerable)
       {
-         var count = order > list.Count() ? list.Count() : order - 1;
+         var list = enumerable.ToList();
+         var count = order > list.Count ? list.Count : order - 1;
          var newList = list.ToList();
-         newList.RemoveRange(0, list.Count() - count);
+         newList.RemoveRange(0, list.Count - count);
 
          var pages = orders[count];
          OrderPage page;
@@ -115,20 +115,20 @@ namespace MusicGenerator.Probability
             page = pages[newList[0]];
             for (var i = 1; i < count; i++)
             {
-               if (!page.children.ContainsKey(newList[i]))
+               if (!page.Children.ContainsKey(newList[i]))
                {
                   newList.RemoveRange(0, 1);
                   return GetNext(newList);
                }
 
-               page = page.children[newList[i]];
+               page = page.Children[newList[i]];
             }
          }
          else
          {
             page = new OrderPage
             {
-               children = pages
+               Children = pages
             };
          }
 
@@ -138,9 +138,9 @@ namespace MusicGenerator.Probability
       private int GetRandomValueFromOrderPage(OrderPage page)
       {
          var list = new List<int>();
-         foreach (var p in page.children)
+         foreach (var p in page.Children)
          {
-            for (var i = 0; i < p.Value.occurences; i++)
+            for (var i = 0; i < p.Value.Occurences; i++)
             {
                list.Add(p.Key);
             }

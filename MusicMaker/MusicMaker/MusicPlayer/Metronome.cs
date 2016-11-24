@@ -6,14 +6,13 @@ namespace MusicMaker.MusicPlayer
 
    public class Metronome
    {
-      public OnTick OnSixteenthTick;
-
-      private int beatsPerMinute;
+      private readonly Stopwatch stopwatch;
       private int millisPerBeat;
       private int millisPerSixteenth;
-      private Stopwatch stopwatch;
       private long currentMs;
       private bool playing;
+
+      public OnTick OnSixteenthTick;
 
       public Metronome()
       {
@@ -22,7 +21,6 @@ namespace MusicMaker.MusicPlayer
 
       public void SetSpeed(int beatsPerMinute)
       {
-         this.beatsPerMinute = beatsPerMinute;
          millisPerBeat = 60000 / beatsPerMinute;
          millisPerSixteenth = millisPerBeat / 16;
       }

@@ -18,7 +18,7 @@ namespace MusicGenerator
       public IEnumerable<Note> GenerateNotesFromFile(string file)
       {
          var midiCsvReader = new MidiCsvReader();
-         var trainingDataNotes = midiCsvReader.ConvertFileToNoteList(file);
+         var trainingDataNotes = midiCsvReader.ConvertFileToNoteList(file).ToList();
 
          var noteMarkovChain = new MarkovChain(markovChainOrder);
          noteMarkovChain.AddNoteList(trainingDataNotes);

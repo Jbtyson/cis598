@@ -5,7 +5,7 @@ namespace MusicGenerator.MusicStructure
 {
    public static class PitchCode
    {
-      private static Dictionary<string, int> pitchCodes = new Dictionary<string, int>
+      private static readonly Dictionary<string, int> pitchCodes = new Dictionary<string, int>
       {
          {"C3",  60},
          {"C#3", 61},

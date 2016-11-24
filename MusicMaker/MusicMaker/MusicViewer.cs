@@ -9,12 +9,12 @@ namespace MusicMaker
 {
    public partial class MusicViewer : Form
    {
-      private string[] noteNames = { "A   ", "A# ", "B   ", "C   ", "C# ", "D   ", "D# ", "E   ", "F   ", "F# ", "G   ", "G# " };
+      private const int sixteenthNoteWidth = 5;
+      private const int noteHeight = 6;
+      private readonly string[] noteNames = { "A   ", "A# ", "B   ", "C   ", "C# ", "D   ", "D# ", "E   ", "F   ", "F# ", "G   ", "G# " };
+      private readonly IEnumerable<Note> notes;
       private int noteIndex;
       private Graphics graphics;
-      private int sixteenthNoteWidth = 5;
-      private int noteHeight = 6;
-      private readonly IEnumerable<Note> notes;
 
       public MusicViewer(IEnumerable<Note> notes)
       {
