@@ -4,7 +4,7 @@ using MusicGenerator.MusicStructure;
 
 namespace MusicGenerator.Input
 {
-   public class MidiCsvReader
+   public class CsvReader
    {
       private int currentTime;
 

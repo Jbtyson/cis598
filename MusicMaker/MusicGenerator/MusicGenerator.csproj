@@ -41,7 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Input\MidiCsvReader.cs" />
+    <Compile Include="Input\CsvReader.cs" />
+    <Compile Include="Input\Midi\ByteConversionMethods.cs" />
+    <Compile Include="Input\Midi\HeaderChunk.cs" />
+    <Compile Include="Input\Midi\MidiFileReader.cs" />
     <Compile Include="MusicCreator.cs" />
     <Compile Include="MusicStructure\Chord.cs" />
     <Compile Include="MusicStructure\Note.cs" />
@@ -56,6 +59,7 @@
     <None Include="data\odeToJoyBass.csv" />
     <None Include="data\odeToJoyMelody.csv" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
