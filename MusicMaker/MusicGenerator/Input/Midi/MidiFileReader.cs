@@ -9,11 +9,11 @@ namespace MusicGenerator.Input.Midi
 {
    public class MidiFileReader
    {
-      private readonly byte[] bytes;
+      private readonly byte[] data;
 
       public MidiFileReader(string file)
       {
-         bytes = File.ReadAllBytes(file);
+         data = File.ReadAllBytes(file);
       }
 
       public IEnumerable<Note> GetNotes()
@@ -25,12 +25,40 @@ namespace MusicGenerator.Input.Midi
       {
          return new HeaderChunk
          {
-            Label = bytes.ToInt32(0),
-            HeaderLength = bytes.ToInt32(4),
-            Format = (Format)bytes.ToInt16(8),
-            NumberOfTracks = bytes.ToInt16(10),
-            Division = bytes.ToInt16(12)
+            Label = data.ToInt32(0),
+            HeaderLength = data.ToInt32(4),
+            Format = (Format)data.ToInt16(8),
+            NumberOfTracks = data.ToInt16(10),
+            Division = data.ToInt16(12),
+            Size = 14
          };
+      }
+
+      public IEnumerable<TrackChunk> GetTrackChunks(int tracks, int index)
+      {
+         var trackChunks = new List<TrackChunk>();
+         var offset = 0;
+         for (var i = 0; i < tracks; i++)
+         {
+            var trackChunk = GetTrackChunk(index + offset);
+            trackChunks.Add(trackChunk);
+            offset += trackChunk.Size;
+         }
+
+         return trackChunks;
+      }
+
+      public TrackChunk GetTrackChunk(int index)
+      {
+         var trackChunk = new TrackChunk
+         {
+            Label = data.ToInt32(index),
+            Length = data.ToInt32(index + 4),
+            TrackEvents = new List<TrackEvent>()
+         };
+         trackChunk.Size = trackChunk.Length + 8;
+
+         return trackChunk;
       }
    }
 }

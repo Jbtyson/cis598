@@ -7,6 +7,7 @@
       public Format Format { get; set; }
       public short NumberOfTracks { get; set; }
       public short Division { get; set; }
+      public int Size { get; set; }
    }
 
    public enum Format

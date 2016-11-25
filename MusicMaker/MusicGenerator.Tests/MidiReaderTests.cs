@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MusicGenerator.Input.Midi;
 
 namespace MusicGenerator.Tests
@@ -16,6 +17,19 @@ namespace MusicGenerator.Tests
          Assert.AreEqual(Format.MultipleTrack, hc.Format);
          Assert.AreEqual(4, hc.NumberOfTracks);
          Assert.AreEqual(240, hc.Division);
+      }
+
+      [TestMethod]
+      public void CanGetTrackChunk()
+      {
+         var mfr = new MidiFileReader("..\\..\\..\\MusicGenerator\\data\\maryHadALittleLamb.mid");
+         var hc = mfr.GetHeaderChunk();
+         var tracks = mfr.GetTrackChunks(hc.NumberOfTracks, hc.Size);
+
+         Assert.AreEqual(0x4d54726b, tracks.ElementAt(0).Label);
+         Assert.AreEqual(0x4d54726b, tracks.ElementAt(1).Label);
+         Assert.AreEqual(0x4d54726b, tracks.ElementAt(2).Label);
+         Assert.AreEqual(0x4d54726b, tracks.ElementAt(3).Label);
       }
    }
 }
