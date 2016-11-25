@@ -45,9 +45,9 @@
     <Compile Include="Input\Midi\ByteConversionMethods.cs" />
     <Compile Include="Input\Midi\Event.cs" />
     <Compile Include="Input\Midi\HeaderChunk.cs" />
+    <Compile Include="Input\Midi\MetaEventType.cs" />
     <Compile Include="Input\Midi\MidiFileReader.cs" />
     <Compile Include="Input\Midi\TrackChunk.cs" />
-    <Compile Include="Input\Midi\TrackEvent.cs" />
     <Compile Include="MusicCreator.cs" />
     <Compile Include="MusicStructure\Chord.cs" />
     <Compile Include="MusicStructure\Note.cs" />

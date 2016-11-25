@@ -31,5 +31,15 @@ namespace MusicGenerator.Input.Midi
 
          return bytes;
       }
+
+      public static byte[] CopyRange(this byte[] data, int index, int size)
+      {
+         var copy = new byte[size];
+         for (var i = 0; i < size; i++)
+         {
+            copy[i] = data[index + i];
+         }
+         return copy;
+      }
    }
 }

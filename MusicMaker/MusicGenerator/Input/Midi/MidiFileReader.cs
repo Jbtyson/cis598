@@ -1,8 +1,6 @@
-﻿using System;
-using System.CodeDom;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using MusicGenerator.MusicStructure;
 
 namespace MusicGenerator.Input.Midi
@@ -54,11 +52,67 @@ namespace MusicGenerator.Input.Midi
          {
             Label = data.ToInt32(index),
             Length = data.ToInt32(index + 4),
-            TrackEvents = new List<TrackEvent>()
          };
          trackChunk.Size = trackChunk.Length + 8;
+         trackChunk.TrackEvents = GetMidiEventsForTrack(index + 8, trackChunk.Size - 8);
 
          return trackChunk;
+      }
+
+      public IEnumerable<Event> GetMidiEventsForTrack(int index, int size)
+      {
+         var events = new List<Event>();
+         var currentIndex = index;
+         while (currentIndex < index + size)
+         {
+            var newEvent = new Event();
+            var eventType = data[currentIndex];
+            switch (eventType)
+            {
+               case 0xFF:
+                  newEvent.EventType = EventType.MetaEvent;
+                  currentIndex += ProcessMetaEvent(newEvent, currentIndex);
+                  break;
+               case 0xF7:
+               case 0xF0:
+                  newEvent.EventType = EventType.SystemExclusive;
+                  break;
+               default:
+                  newEvent.EventType = EventType.MidiEvent;
+                  break;
+            }
+
+            events.Add(newEvent);
+         }
+
+         return events;
+      }
+
+      // Returns number of bytes read and sets value to the value read
+      public int ReadVariableLengthValue(int index, out int value)
+      {
+         var firstBitCleared = false;
+         var currentByte = 0;
+         while (!firstBitCleared)
+         {
+            var b = data[index + currentByte];
+            if ((b &= 0x80) > 0)
+               b -= 0x80;
+            else
+               firstBitCleared = true;
+
+         }
+      }
+
+      // Returns bytes read
+      public int ProcessMetaEvent(Event metaEvent, int index)
+      {
+         metaEvent.MetaEventType = (MetaEventType) data[index + 1];
+         int metaDataLength;
+         var bytesRead = ReadVariableLengthValue(index + 2, out metaDataLength);
+         metaEvent.MetaDataLength = metaDataLength;
+         metaEvent.Data = data.CopyRange(index + 2 + bytesRead, metaDataLength);
+         return 2 + bytesRead + metaDataLength;
       }
    }
 }

@@ -4,9 +4,9 @@ namespace MusicGenerator.Input.Midi
 {
    public class TrackChunk
    {
-      public int Label;
-      public int Length;
-      public IEnumerable<TrackEvent> TrackEvents { get; set; }
-      public int Size;
+      public int Label { get; set; }
+      public int Length { get; set; }
+      public IEnumerable<Event> TrackEvents { get; set; }
+      public int Size { get; set; }
    }
 }
