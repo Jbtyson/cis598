@@ -8,6 +8,17 @@ namespace MusicGenerator.Tests
    public class MidiReaderTests
    {
       [TestMethod]
+      public void CanReadVariableLengthValue()
+      {
+         var data = new byte[] { 0x7f };
+         Assert.AreEqual(127, data.ReadVariableLengthValue(0));
+         data = new byte[] { 0x81, 0x7f };
+         Assert.AreEqual(255, data.ReadVariableLengthValue(0));
+         data = new byte[] { 0x82, 0x80, 0x0 };
+         Assert.AreEqual(32768, data.ReadVariableLengthValue(0));
+      }
+
+      [TestMethod]
       public void CanGetHeaderChunk()
       {
          var mfr = new MidiFileReader("..\\..\\..\\MusicGenerator\\data\\maryHadALittleLamb.mid");

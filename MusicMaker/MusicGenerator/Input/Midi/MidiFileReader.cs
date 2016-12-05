@@ -93,15 +93,43 @@ namespace MusicGenerator.Input.Midi
       {
          var firstBitCleared = false;
          var currentByte = 0;
+         var variableBytes = new byte[4];
+
          while (!firstBitCleared)
          {
             var b = data[index + currentByte];
-            if ((b &= 0x80) > 0)
+            if ((b & 0x80) > 0)
                b -= 0x80;
             else
                firstBitCleared = true;
-
+            variableBytes[currentByte] = b;
          }
+
+         // shift byte 2 down
+         if ((variableBytes[1] & 0x01) > 0)
+         {
+            variableBytes[0] += 0x80;
+            variableBytes[1] = (byte)(variableBytes[1] >> 1);
+         }
+         // shift byte 3 down
+         if ((variableBytes[2] & 0x01) > 0)
+         {
+            variableBytes[1] += 0x40;
+            variableBytes[2] = (byte)(variableBytes[2] >> 1);
+            if ((variableBytes[2] & 0x01) > 0)
+            {
+               variableBytes[1] += 0x80;
+               variableBytes[2] = (byte)(variableBytes[2] >> 1);
+            }
+         }
+         // shift byte 4 down
+         if ((variableBytes[3] & 0x01) > 0)
+         {
+            variableBytes[2] += 0x20;
+         }
+
+         value = 0;
+         return currentByte;
       }
 
       // Returns bytes read
