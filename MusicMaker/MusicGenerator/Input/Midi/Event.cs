@@ -14,5 +14,9 @@
       public byte[] Data { get; set; }
       public MetaEventType MetaEventType { get; set; }
       public int MetaDataLength { get; set; }
+      public int Channel { get; set; }
+      public bool IsNoteOn { get; set; }
+      public int PitchCode { get; set; }
+      public int Volume { get; set; }
    }
 }

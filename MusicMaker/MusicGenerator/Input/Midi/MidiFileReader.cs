@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using MusicGenerator.MusicStructure;
@@ -40,7 +40,7 @@ namespace MusicGenerator.Input.Midi
          {
             var trackChunk = GetTrackChunk(index + offset);
             trackChunks.Add(trackChunk);
-            offset += trackChunk.Size;
+            offset += trackChunk.Size + 8;
          }
 
          return trackChunks;
@@ -53,8 +53,10 @@ namespace MusicGenerator.Input.Midi
             Label = data.ToInt32(index),
             Length = data.ToInt32(index + 4),
          };
+         if (trackChunk.Label != 1297379947)
+            throw new ArgumentOutOfRangeException("Invalid Track Header.");
          trackChunk.Size = trackChunk.Length + 8;
-         trackChunk.TrackEvents = GetMidiEventsForTrack(index + 8, trackChunk.Size - 8);
+         trackChunk.TrackEvents = GetMidiEventsForTrack(index + 8, trackChunk.Size);
 
          return trackChunk;
       }
@@ -79,6 +81,7 @@ namespace MusicGenerator.Input.Midi
                   break;
                default:
                   newEvent.EventType = EventType.MidiEvent;
+                  currentIndex += ProcessMidiEvent(newEvent, currentIndex);
                   break;
             }
 
@@ -141,6 +144,31 @@ namespace MusicGenerator.Input.Midi
          metaEvent.MetaDataLength = metaDataLength;
          metaEvent.Data = data.CopyRange(index + 2 + bytesRead, metaDataLength);
          return 2 + bytesRead + metaDataLength;
+      }
+
+      public int ProcessMidiEvent(Event midiEvent, int index)
+      {
+         int value;
+         var bytesRead = ReadVariableLengthValue(index, out value);
+         index += bytesRead;
+
+         switch (data[index] & 240)
+         {
+            case 0x90:
+               midiEvent.IsNoteOn = true;
+               break;
+            case 0x80:
+               midiEvent.IsNoteOn = false;
+               break;
+            default:
+               return 4;
+         }
+
+         midiEvent.Channel = data[index + 1] & 15;
+         midiEvent.PitchCode = data[index + 2];
+         midiEvent.Volume = data[index + 3];
+
+         return 4;
       }
    }
 }
