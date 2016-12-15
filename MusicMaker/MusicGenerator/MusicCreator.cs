@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MusicGenerator.Input;
 using MusicGenerator.MusicStructure;
@@ -15,11 +16,23 @@ namespace MusicGenerator
          this.markovChainOrder = markovChainOrder;
       }
 
+      public IEnumerable<Note> GetOdeToJoy()
+      {
+         var melody = GenerateNotesFromFile("..\\..\\..\\MusicGenerator\\data\\odeToJoyMelody.csv");
+         var bass = GenerateNotesFromFile("..\\..\\..\\MusicGenerator\\data\\odeToJoyBass.csv");
+         var notes = MergeNoteLists(melody, bass);
+         return notes;
+      }
+
       public IEnumerable<Note> GenerateNotesFromFile(string file)
       {
          var midiCsvReader = new CsvReader();
          var trainingDataNotes = midiCsvReader.ConvertFileToNoteList(file).ToList();
+         return GenerateNotesFromList(trainingDataNotes);
+      }
 
+      public IEnumerable<Note> GenerateNotesFromList(IEnumerable<Note> trainingDataNotes, int lines = 1)
+      {
          var noteMarkovChain = new MarkovChain(markovChainOrder);
          noteMarkovChain.AddNoteList(trainingDataNotes);
          noteMarkovChain.Create();
@@ -55,7 +68,9 @@ namespace MusicGenerator
          for (var i = 0; i < noteIdList.Count; i++)
          {
             notes.Add(new Note(PitchCode.GetNoteName(noteIdList[i]), currentNotePosition, (NoteLength)noteLengthList[i]));
-            currentNotePosition += noteLengthList[i];
+
+            if (i % lines == 0)
+               currentNotePosition += noteLengthList[i];
          }
 
          return notes;

@@ -8,6 +8,7 @@ namespace MusicGenerator.Input.Midi
 {
    public class MidiFileReader
    {
+      private static int elapsedTime;
       private const int midiEventLength = 3;
       private readonly byte[] data;
 
@@ -22,26 +23,8 @@ namespace MusicGenerator.Input.Midi
          var tracks = GetTrackChunks(header.NumberOfTracks, header.Size);
          var notes = new List<Note>();
 
-         // cheating
-         //foreach (var track in tracks)
-         //{
-         //   var startInterval = 0;
-         //   for (var i = track.StartIndex; i < track.Size; i++)
-         //   {
-         //      try
-         //      {
-         //         if ((data[i] & 0x90) == 0x90 && data[i+2] > 0)
-         //         {
-         //            notes.Add(new Note(MidiNoteConverter.midiNoteCodes[data[i + 1]], startInterval, NoteLength.Quarter));
-         //            startInterval += 2;
-         //         }
-         //      }
-         //      catch (Exception) { }
-         //   }
-         //}
-
          foreach (var track in tracks)
-            foreach (var note in MidiNoteConverter.ConvertMidiEventsToNotes(track.TrackEvents))
+            foreach (var note in MidiNoteConverter.ConvertMidiEventsToNotes(track.TrackEvents, header.Division))
                notes.Add(note);
 
 
@@ -78,6 +61,7 @@ namespace MusicGenerator.Input.Midi
 
       public TrackChunk GetTrackChunk(int index)
       {
+         elapsedTime = 0;
          var trackChunk = new TrackChunk
          {
             Label = data.ToInt32(index),
@@ -99,8 +83,11 @@ namespace MusicGenerator.Input.Midi
          while (currentIndex < index + size && currentIndex < data.Length - 1)
          {
             var newEvent = new Event();
+
             int bytesRead;
-            newEvent.DeltaTime = data.ReadVariableLengthValue(index, out bytesRead);
+            newEvent.DeltaTime = data.ReadVariableLengthValue(currentIndex, out bytesRead);
+            elapsedTime += newEvent.DeltaTime;
+            newEvent.StartTime = elapsedTime;
             currentIndex += bytesRead;
 
             var eventType = data[currentIndex];
@@ -150,8 +137,10 @@ namespace MusicGenerator.Input.Midi
             case 0x80:
                midiEvent.IsNoteOn = false;
                break;
+            case 0xC0:
+               return midiEventLength - 1;
             default:
-               return 4;
+               return midiEventLength;
          }
 
          midiEvent.Channel = data[index] & 15;

@@ -19,13 +19,13 @@ namespace MusicMaker
          Application.SetCompatibleTextRenderingDefault(false);
 
          var musicCreator = new MusicCreator(5);
-         var melody = musicCreator.GenerateNotesFromFile("..\\..\\..\\MusicGenerator\\data\\odeToJoyMelody.csv");
-         var bass = musicCreator.GenerateNotesFromFile("..\\..\\..\\MusicGenerator\\data\\odeToJoyBass.csv");
-         var notes = musicCreator.MergeNoteLists(melody, bass);
+         var notes = musicCreator.GetOdeToJoy();
 
          //var mfr = new MidiFileReader("..\\..\\..\\MusicGenerator\\data\\maryHadALittleLamb.mid");
-         var mfr = new MidiFileReader("..\\..\\..\\MusicGenerator\\data\\happy_birthday.mid");
+         var mfr = new MidiFileReader("..\\..\\..\\MusicGenerator\\data\\beethoven_ode_to_joy.mid");
+         //var mfr = new MidiFileReader("..\\..\\..\\MusicGenerator\\data\\happy_birthday.mid");
          notes = mfr.GetNotes();
+         notes = musicCreator.GenerateNotesFromList(notes, 2);
 
          var musicController = new MusicController();
          new Thread(delegate () { musicController.Play(notes); }).Start();

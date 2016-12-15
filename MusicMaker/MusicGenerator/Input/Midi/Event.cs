@@ -11,6 +11,7 @@
    {
       public EventType EventType { get; set; }
       public int ElapsedTime { get; set; }
+      public int StartTime { get; set; }
       public byte[] Data { get; set; }
       public MetaEventType MetaEventType { get; set; }
       public int MetaDataLength { get; set; }

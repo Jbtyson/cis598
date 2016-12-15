@@ -140,18 +140,17 @@ namespace MusicGenerator.Input.Midi
       };
       #endregion
 
-      public static IEnumerable<Note> ConvertMidiEventsToNotes(IEnumerable<Event> events)
+      public static IEnumerable<Note> ConvertMidiEventsToNotes(IEnumerable<Event> events, int division)
       {
          var notes = new List<Note>();
-         var startInterval = 0;
 
          foreach (var e in events)
          {
             if (e.IsNoteOn)
             {
                var pitchCode = midiNoteCodes[e.PitchCode];
-               var note = new Note(pitchCode, startInterval, NoteLength.Quarter);
-               startInterval += 4;
+               var ratio = (int)(e.StartTime/(double)division * 16);
+               var note = new Note(pitchCode, ratio, NoteLength.Quarter);
                notes.Add(note);
             }
          }

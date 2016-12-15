@@ -66,7 +66,7 @@ namespace MusicGenerator.Probability
          var queue = new Queue<int>();
          var chain = new int[currentOrder];
 
-         for (var i = 0; i < currentOrder - 1; i++)
+         for (var i = 0; i < currentOrder - 1 && i < values.Count; i++)
          {
             queue.Enqueue(values[i]);
          }
