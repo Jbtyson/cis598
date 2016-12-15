@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using MusicGenerator.MusicStructure;
 
 namespace MusicGenerator.Input.Midi
 {
    public class MidiFileReader
    {
+      private const int midiEventLength = 3;
       private readonly byte[] data;
 
       public MidiFileReader(string file)
@@ -16,7 +18,34 @@ namespace MusicGenerator.Input.Midi
 
       public IEnumerable<Note> GetNotes()
       {
-         return null;
+         var header = GetHeaderChunk();
+         var tracks = GetTrackChunks(header.NumberOfTracks, header.Size);
+         var notes = new List<Note>();
+
+         // cheating
+         //foreach (var track in tracks)
+         //{
+         //   var startInterval = 0;
+         //   for (var i = track.StartIndex; i < track.Size; i++)
+         //   {
+         //      try
+         //      {
+         //         if ((data[i] & 0x90) == 0x90 && data[i+2] > 0)
+         //         {
+         //            notes.Add(new Note(MidiNoteConverter.midiNoteCodes[data[i + 1]], startInterval, NoteLength.Quarter));
+         //            startInterval += 2;
+         //         }
+         //      }
+         //      catch (Exception) { }
+         //   }
+         //}
+
+         foreach (var track in tracks)
+            foreach (var note in MidiNoteConverter.ConvertMidiEventsToNotes(track.TrackEvents))
+               notes.Add(note);
+
+
+         return notes;
       }
 
       public HeaderChunk GetHeaderChunk()
@@ -39,8 +68,9 @@ namespace MusicGenerator.Input.Midi
          for (var i = 0; i < tracks; i++)
          {
             var trackChunk = GetTrackChunk(index + offset);
+            trackChunk.StartIndex = index;
             trackChunks.Add(trackChunk);
-            offset += trackChunk.Size + 8;
+            offset += trackChunk.Size;
          }
 
          return trackChunks;
@@ -65,14 +95,21 @@ namespace MusicGenerator.Input.Midi
       {
          var events = new List<Event>();
          var currentIndex = index;
-         while (currentIndex < index + size)
+
+         while (currentIndex < index + size && currentIndex < data.Length - 1)
          {
             var newEvent = new Event();
+            int bytesRead;
+            newEvent.DeltaTime = data.ReadVariableLengthValue(index, out bytesRead);
+            currentIndex += bytesRead;
+
             var eventType = data[currentIndex];
             switch (eventType)
             {
                case 0xFF:
                   newEvent.EventType = EventType.MetaEvent;
+                  // skip event type byte
+                  currentIndex++;
                   currentIndex += ProcessMetaEvent(newEvent, currentIndex);
                   break;
                case 0xF7:
@@ -91,68 +128,21 @@ namespace MusicGenerator.Input.Midi
          return events;
       }
 
-      // Returns number of bytes read and sets value to the value read
-      public int ReadVariableLengthValue(int index, out int value)
-      {
-         var firstBitCleared = false;
-         var currentByte = 0;
-         var variableBytes = new byte[4];
-
-         while (!firstBitCleared)
-         {
-            var b = data[index + currentByte];
-            if ((b & 0x80) > 0)
-               b -= 0x80;
-            else
-               firstBitCleared = true;
-            variableBytes[currentByte] = b;
-         }
-
-         // shift byte 2 down
-         if ((variableBytes[1] & 0x01) > 0)
-         {
-            variableBytes[0] += 0x80;
-            variableBytes[1] = (byte)(variableBytes[1] >> 1);
-         }
-         // shift byte 3 down
-         if ((variableBytes[2] & 0x01) > 0)
-         {
-            variableBytes[1] += 0x40;
-            variableBytes[2] = (byte)(variableBytes[2] >> 1);
-            if ((variableBytes[2] & 0x01) > 0)
-            {
-               variableBytes[1] += 0x80;
-               variableBytes[2] = (byte)(variableBytes[2] >> 1);
-            }
-         }
-         // shift byte 4 down
-         if ((variableBytes[3] & 0x01) > 0)
-         {
-            variableBytes[2] += 0x20;
-         }
-
-         value = 0;
-         return currentByte;
-      }
-
       // Returns bytes read
       public int ProcessMetaEvent(Event metaEvent, int index)
       {
-         metaEvent.MetaEventType = (MetaEventType) data[index + 1];
-         int metaDataLength;
-         var bytesRead = ReadVariableLengthValue(index + 2, out metaDataLength);
-         metaEvent.MetaDataLength = metaDataLength;
-         metaEvent.Data = data.CopyRange(index + 2 + bytesRead, metaDataLength);
-         return 2 + bytesRead + metaDataLength;
+         metaEvent.MetaEventType = (MetaEventType)data[index++];
+
+         int bytesRead;
+         metaEvent.MetaDataLength = data.ReadVariableLengthValue(index, out bytesRead);
+         metaEvent.Data = data.CopyRange(index + bytesRead, metaEvent.MetaDataLength);
+
+         return 1 + bytesRead + metaEvent.MetaDataLength;
       }
 
       public int ProcessMidiEvent(Event midiEvent, int index)
       {
-         int value;
-         var bytesRead = ReadVariableLengthValue(index, out value);
-         index += bytesRead;
-
-         switch (data[index] & 240)
+         switch (data[index] & 0xF0)
          {
             case 0x90:
                midiEvent.IsNoteOn = true;
@@ -164,11 +154,11 @@ namespace MusicGenerator.Input.Midi
                return 4;
          }
 
-         midiEvent.Channel = data[index + 1] & 15;
-         midiEvent.PitchCode = data[index + 2];
-         midiEvent.Volume = data[index + 3];
+         midiEvent.Channel = data[index] & 15;
+         midiEvent.PitchCode = data[index + 1];
+         midiEvent.Volume = data[index + 2];
 
-         return 4;
+         return midiEventLength;
       }
    }
 }

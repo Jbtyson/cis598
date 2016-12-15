@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 
 namespace MusicGenerator.Input.Midi
 {
    public static class ByteConversionMethods
    {
-      private static Encoding encoding = Encoding.UTF8;
-
       public static short ToInt16(this byte[] data, int index)
       {
          var bytes = GetBytes(data, index, sizeof(short));
@@ -20,19 +16,19 @@ namespace MusicGenerator.Input.Midi
          return BitConverter.ToInt32(bytes, 0);
       }
 
-      public static long ReadVariableLengthValue(this byte[] data, int index)
+      public static int ReadVariableLengthValue(this byte[] data, int index, out int bytesRead)
       {
          var binaryStr = "";
          var firstBitCleared = false;
-         var currentByte = 0;
+         bytesRead = 0;
          while (!firstBitCleared)
          {
-            if ((data[currentByte] & 0x80) == 0)
+            if ((data[index + bytesRead] & 0x80) == 0)
                firstBitCleared = true;
-            binaryStr += Convert.ToString(data[currentByte++], 2).PadLeft(8, '0').Substring(1);
+            binaryStr += Convert.ToString(data[index + bytesRead++], 2).PadLeft(8, '0').Substring(1);
          }
 
-         return Convert.ToInt64(binaryStr.PadLeft(64, '0'), 2);
+         return Convert.ToInt32(binaryStr.PadLeft(32, '0'), 2);
       }
 
       private static byte[] GetBytes(byte[] data, int index, int size)

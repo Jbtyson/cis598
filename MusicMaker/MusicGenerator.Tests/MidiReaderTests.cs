@@ -10,12 +10,16 @@ namespace MusicGenerator.Tests
       [TestMethod]
       public void CanReadVariableLengthValue()
       {
+         int bytesRead;
          var data = new byte[] { 0x7f };
-         Assert.AreEqual(127, data.ReadVariableLengthValue(0));
+         Assert.AreEqual(127, data.ReadVariableLengthValue(0, out bytesRead));
+         Assert.AreEqual(1, bytesRead);
          data = new byte[] { 0x81, 0x7f };
-         Assert.AreEqual(255, data.ReadVariableLengthValue(0));
+         Assert.AreEqual(255, data.ReadVariableLengthValue(0, out bytesRead));
+         Assert.AreEqual(2, bytesRead);
          data = new byte[] { 0x82, 0x80, 0x0 };
-         Assert.AreEqual(32768, data.ReadVariableLengthValue(0));
+         Assert.AreEqual(32768, data.ReadVariableLengthValue(0, out bytesRead));
+         Assert.AreEqual(3, bytesRead);
       }
 
       [TestMethod]

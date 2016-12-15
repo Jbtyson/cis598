@@ -18,5 +18,6 @@
       public bool IsNoteOn { get; set; }
       public int PitchCode { get; set; }
       public int Volume { get; set; }
+      public int DeltaTime { get; set; }
    }
 }

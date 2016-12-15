@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Threading;
 using MusicGenerator;
+using MusicGenerator.Input.Midi;
 using MusicMaker.MusicPlayer;
 
 namespace MusicMaker
@@ -21,6 +22,10 @@ namespace MusicMaker
          var melody = musicCreator.GenerateNotesFromFile("..\\..\\..\\MusicGenerator\\data\\odeToJoyMelody.csv");
          var bass = musicCreator.GenerateNotesFromFile("..\\..\\..\\MusicGenerator\\data\\odeToJoyBass.csv");
          var notes = musicCreator.MergeNoteLists(melody, bass);
+
+         //var mfr = new MidiFileReader("..\\..\\..\\MusicGenerator\\data\\maryHadALittleLamb.mid");
+         var mfr = new MidiFileReader("..\\..\\..\\MusicGenerator\\data\\happy_birthday.mid");
+         notes = mfr.GetNotes();
 
          var musicController = new MusicController();
          new Thread(delegate () { musicController.Play(notes); }).Start();
